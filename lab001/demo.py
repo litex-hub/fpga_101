@@ -1,7 +1,7 @@
 from migen import *
 
-from litex.build.generic_platform import *
-from litex.build.xilinx import XilinxPlatform
+from migen.build.generic_platform import *
+from migen.build.xilinx import XilinxPlatform
 
 #
 # platform
