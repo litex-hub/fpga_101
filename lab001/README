@@ -7,20 +7,20 @@
 
 [> Instructions
 ---------------
-1) Build the design (demo.py) and load it (load.py)
+1) Build the design (base.py) and load it (load.py)
 2) System clock is 100Mhz, make the led blink at 1Hz
 3) Connect the 16 swithes to the 16 leds.
-4) Same as 3), but invert the 8 polarity on the 8 first leds.
-5) make one of the rgb led blink at: 1Hz for the red, 2Hz for the green, 4Hz for the blue.
+4) Same as 3), but invert the polarity on the 8 first leds.
+5) Make one of the rgb led blink at: 1Hz for the red, 2Hz for the green, 4Hz for the blue.
 
-[> Infos
---------
+[> Additional infos
+-------------------
 Migen manual can be found at: https://m-labs.hk/migen/manual/
-For our lab we just need to know:
-- The Platform defines our IOs.
-- A request on a Platform can only be done once.
-- A request create a Signal() in Migen that can be used as others Signals.
-- Affectation is done with ".eq()" in Migen.
-- Combinatorials logic must be added to self.comb: self.comb += [my_logic].
+
+Some Pitfalls:
+- The platform defines our IOs and a request on a it can only be done once.
+- A request create a Migen Signal() that can be used as others Signals.
+- Affectation is done with ".eq()" (equivalent to <= in VHDL).
+- Combinatorial logic must be added to self.comb: self.comb += [my_logic].
 - Synchronous logic must be added to self.sync: self.sync += [my_logic].
-- "not" is done in Python with "~".
+- Migen uses standard Python operators, a "not" in Migen is "~". 

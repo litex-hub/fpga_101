@@ -1,5 +1,4 @@
 from migen import *
-
 from migen.build.generic_platform import *
 from migen.build.xilinx import XilinxPlatform
 
@@ -37,15 +36,23 @@ class Platform(XilinxPlatform):
 
 # create our platform (fpga interface)
 platform = Platform()
-led = platform.request("user_led")
 
 # create our module (fpga description)
-module = Module()
+class Blink(Module):
+    def __init__(self, blink_freq, sys_clk_freq, led):
+        counter = Signal(32)     
+        # synchronous assignments
+        self.sync += [
+            counter.eq(counter + 1),
+            If(counter == int((sys_clk_freq/blink_freq)/2 - 1),
+                counter.eq(0),
+                led.eq(~led)
+            )
+        ]
+        # combinatorial assignements
+        self.comb += []
 
-# create a counter and blink a led
-counter = Signal(26)
-module.comb += led.eq(counter[25])
-module.sync += counter.eq(counter + 1)
+module = Blink(1, 100e6, platform.request("user_led"))
 
 #
 # build
