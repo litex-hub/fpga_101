@@ -1,6 +1,6 @@
      __   ___   ___      ___  ___ ___
     / /  / _ | / _ )____/ _ \/ _ <  /
-   / /__/ __ |/ _  /___/ // / // / / 
+   / /__/ __ |/ _  /___/ // / // / /
   /____/_/ |_/____/    \___/\___/_/
             FPGA-101
   Copyright 2018 / EnjoyDigital
@@ -12,3 +12,15 @@
 3) Connect the 16 swithes to the 16 leds.
 4) Same as 3), but invert the 8 polarity on the 8 first leds.
 5) make one of the rgb led blink at: 1Hz for the red, 2Hz for the green, 4Hz for the blue.
+
+[> Infos
+--------
+Migen manual can be found at: https://m-labs.hk/migen/manual/
+For our lab we just need to know:
+- The Platform defines our IOs.
+- A request on a Platform can only be done once.
+- A request create a Signal() in Migen that can be used as others Signals.
+- Affectation is done with ".eq()" in Migen.
+- Combinatorials logic must be added to self.comb: self.comb += [my_logic].
+- Synchronous logic must be added to self.sync: self.sync += [my_logic].
+- "not" is done in Python with "~".
