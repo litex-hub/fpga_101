@@ -37,7 +37,7 @@ class Platform(XilinxPlatform):
 
 # create our platform (fpga interface)
 platform = Platform()
-led = platform .request("user_led")
+led = platform.request("user_led")
 
 # create our module (fpga description)
 module = Module()
@@ -51,4 +51,4 @@ module.sync += counter.eq(counter + 1)
 # build
 #
 
-plat.build(m)
+platform.build(module)
