@@ -1,9 +1,11 @@
-     __   ___   ___      ___  ___ ___
-    / /  / _ | / _ )____/ _ \/ _ <  /
-   / /__/ __ |/ _  /___/ // / // / /
-  /____/_/ |_/____/    \___/\___/_/
-            FPGA-101
-  Copyright 2018 / EnjoyDigital
+                  __   ___   ___      ___  ___ ___
+                 / /  / _ | / _ )____/ _ \/ _ <  /
+                / /__/ __ |/ _  /___/ // / // / /
+               /____/_/ |_/____/    \___/\___/_/
+               	        Discover FPGAs
+
+                  FPGA-101 / Lessons / Labs
+                Copyright 2018 / EnjoyDigital
 
 [> Instructions
 ---------------
@@ -11,13 +13,16 @@
 2) System clock is 100Mhz, make the led blink at 1Hz
 3) Connect the 16 swithes to the 16 leds.
 4) Same as 3), but invert the polarity on the 8 first leds.
-5) Make one of the rgb led blink at: 1Hz for the red, 2Hz for the green, 4Hz for the blue.
+5) Make one of the rgb led blink at: 1Hz for the red, 2Hz for the green, 
+4Hz for the blue.
 
 [> Additional infos
 -------------------
 Migen manual can be found at: https://m-labs.hk/migen/manual/
 
-Some Pitfalls:
+The pin mapping for the basic IOs of the Nexys4DDR can be found in pinout.png.
+
+Some pitfalls:
 - The platform defines our IOs and a request on a it can only be done once.
 - A request create a Migen Signal() that can be used as others Signals.
 - Affectation is done with ".eq()" (equivalent to <= in VHDL).
