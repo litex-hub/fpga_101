@@ -7,11 +7,18 @@
 
 [> Lessons
 ----------
- - Lesson-001: Discover FPGAs / http://goo.gl/7CXE6N
+ - Lesson-001: Discover FPGAs
+    en: http://goo.gl/7CXE6N
+    fr: http://goo.gl/FScQCJ
+ - Lesson-002: Create your first FPGA design
+    en: http://goo.gl/mZJvFQ
 
 [> Labs
 -------
- - Lab-001: Discover FPGAs / http://goo.gl/CrHD1P
+ - Lab-001: Discover FPGAs
+     http://goo.gl/CrHD1P
+ - Lab-002: Create a digital clock with FPGA
+     http://goo.gl/UaygL4
 
 [> Contact
 ----------
