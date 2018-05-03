@@ -7,7 +7,7 @@ class SevenSegment(Module):
     def __init__(self):
         # module's interface
         self.value = value = Signal(4)         # input
-        self.abcdefg = abdefg = Signal(7)      # output
+        self.abcdefg = abcdefg = Signal(7)     # output
 
         # # #
 
@@ -16,7 +16,7 @@ class SevenSegment(Module):
         # values to abdcefg segments control.
         # -- TO BE COMPLETED --
         cases = {
-          0x0: abdefg.eq(0b0111111),
+          0x0: abcdefg.eq(0b0111111),
           # [...]
         }
         # -- TO BE COMPLETED --
@@ -44,7 +44,15 @@ class Display(Module):
         self.submodules.tick = Tick(sys_clk_freq, cs_period)
 
         # rotate cs 6 bits signals to alternate seven segments
-        cs = Signal(6, reset=0b00000001)
+		# cycle 0 : 0b000001
+	    # cycle 1 : 0b000010
+	    # cycle 2 : 0b000100
+	    # cycle 3 : 0b001000
+	    # cycle 4 : 0b010000
+	    # cycle 5 : 0b010000
+	    # cycle 6 : 0b100000
+		# cycle 7 : 0b000001
+        cs = Signal(6, reset=0b000001)
         # synchronous assigment
         self.sync += [
             If(self.tick.ce,
@@ -61,7 +69,7 @@ class Display(Module):
         # to input value selection.
         # -- TO BE COMPLETED --
         cases = {
-            1<<0 : seven_segment.value.eq(self.values[0]),
+            0b000001 : seven_segment.value.eq(self.values[0]),
             # [...]
         }
         # -- TO BE COMPLETED --

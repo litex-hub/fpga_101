@@ -57,7 +57,7 @@ refers to lesson 002 slides: http://goo.gl/mZJvFQ
  8) Execute/Simulate core.py and fill the missing parts of Core.
  9) Add Core module to the Clock module.
 10) Execute/Simulate bcd.py and fill the missing parts of BCD.
-11) Add BCD submodule to the Clock module (you need oeed one for each digit). To add a verilog file to the design, use platform.add_source("my_verilog.v")
+11) Add BCD submodule to the Clock module (you need one BCD module for each digit). To add a verilog file to the design, use platform.add_source("my_verilog.v")
 12) Connect the Core to the BCD modules and the BCD modules to the Display and test on the board.
 13) Add a way to configure the clock (at least minutes and hours)
 

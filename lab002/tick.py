@@ -1,5 +1,9 @@
 from migen import *
 
+# Goals:
+# - understand Migen's Modules/IOs
+# - understand Migen's syntax
+# - simulate a module
 
 class Tick(Module):
     def __init__(self, sys_clk_freq, period):

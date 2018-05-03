@@ -2,6 +2,12 @@ from migen import *
 
 from tick import Tick
 
+# Goals:
+# - understand own to use external modules
+# - understand seven segment display and create simple digit controller
+# - understand how to multiplex displays
+# - use python capabilities to create visual simulations
+
 
 class SevenSegment(Module):
     def __init__(self):
@@ -56,27 +62,40 @@ class Display(Module):
         self.submodules.tick = Tick(sys_clk_freq, cs_period)
 
         # rotate cs 6 bits signals to alternate seven segments
-        cs = Signal(6, reset=0b00000001)
+		# cycle 0 : 0b000001
+	    # cycle 1 : 0b000010
+	    # cycle 2 : 0b000100
+	    # cycle 3 : 0b001000
+	    # cycle 4 : 0b010000
+	    # cycle 5 : 0b010000
+	    # cycle 6 : 0b100000
+		# cycle 7 : 0b000001
+        cs = Signal(6, reset=0b000001)
         # synchronous assigment
         self.sync += [
-            If(self.tick.ce,
-                # -- TO BE COMPLETED --
-                # [...] rotate cs
-                # -- TO BE COMPLETED --
+            If(self.tick.ce,     # at the next tick:
+                cs[1].eq(cs[0]), # bit1 takes bit0 value 
+                cs[2].eq(cs[1]), # bit2 takes bit1 value 
+                cs[3].eq(cs[2]), # bit3 takes bit2 value 
+                cs[4].eq(cs[3]), # bit4 takes bit3 value 
+                cs[5].eq(cs[4]), # bit5 takes bit4 value 
+                cs[0].eq(cs[5])  # bit0 takes bit5 value 
             )
         ]
         # cominatorial assigment
         self.comb += self.cs.eq(cs)
 
         # cs to value selection.
-        # Here we create a table to translate each of the 8 cs possible values
+        # Here we create a table to translate each of the 6 cs possible values
         # to input value selection.
-        # -- TO BE COMPLETED --
         cases = {
-            1<<0 : seven_segment.value.eq(self.values[0]),
-            # [...]
+            0b000001 : seven_segment.value.eq(self.values[0]),
+            0b000010 : seven_segment.value.eq(self.values[1]),
+            0b000100 : seven_segment.value.eq(self.values[2]),
+            0b001000 : seven_segment.value.eq(self.values[3]),
+            0b010000 : seven_segment.value.eq(self.values[4]),
+            0b100000 : seven_segment.value.eq(self.values[5])
         }
-        # -- TO BE COMPLETED --
         # cominatorial assigment
         self.comb += Case(self.cs, cases)
 
