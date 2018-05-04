@@ -69,7 +69,6 @@ platform = Platform()
 class Clock(Module):
     sys_clk_freq = int(100e6)
     def __init__(self):
-        # -- TO BE COMPLETED --
         # Tick generation : timebase
         tick = Tick(self.sys_clk_freq, 1)
         self.submodules += tick
@@ -79,31 +78,53 @@ class Clock(Module):
         self.submodules += display
 
         # Core : counts ss/mm/hh
+        core = Core()
+        self.submodules += core
 
         # set mm/hh
+        btn0_press = UserButtonPress(platform.request("user_btn_r"))
+        btn1_press = UserButtonPress(platform.request("user_btn_l"))
+        self.submodules += btn0_press, btn1_press
 
         # Binary Coded Decimal: convert ss/mm/hh to decimal values
-
+        bcd_seconds = BCD()
+        bcd_minutes = BCD()
+        bcd_hours = BCD()
+        self.submodules += bcd_seconds, bcd_minutes, bcd_hours
         # use the generated verilog file
+        platform.add_source("bcd.v")
     
         # combinatorial assignement
         self.comb += [
             # Connect tick to core (core timebase)
+            core.tick.eq(tick.ce),
 
             # Set minutes/hours
+            core.inc_minutes.eq(btn0_press.rising),
+            core.inc_hours.eq(btn1_press.rising),
 
             # Convert core seconds to bcd and connect
             # to display
+            bcd_seconds.value.eq(core.seconds),
+            display.values[0].eq(bcd_seconds.ones),
+            display.values[1].eq(bcd_seconds.tens),
 
             # Convert core minutes to bcd and connect
             # to display
+            bcd_minutes.value.eq(core.minutes),
+            display.values[2].eq(bcd_minutes.ones),
+            display.values[3].eq(bcd_minutes.tens),
 
             # Convert core hours to bcd and connect
             # to display
+            bcd_hours.value.eq(core.hours),
+            display.values[4].eq(bcd_hours.ones),
+            display.values[5].eq(bcd_hours.tens),
 
             # Connect display to pads
+            platform.request("display_cs_n").eq(~display.cs),
+            platform.request("display_abcdefg").eq(~display.abcdefg)
         ]
-        # -- TO BE COMPLETED --
 
 module = Clock()
 

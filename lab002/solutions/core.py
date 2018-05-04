@@ -33,9 +33,14 @@ class Core(Module):
 
         # synchronous assigment
         self.sync += [
-            # -- TO BE COMPLETED --
+            # increment minutes
+            If(self.inc_minutes,
+                self.minutes.eq(self.minutes + 1)
+            # increment hours
+            ).Elif(self.inc_hours,
+                self.hours.eq(self.hours + 1)
             # at each tick
-            If(self.tick,
+            ).Elif(self.tick,
                 self.seconds.eq(self.seconds + 1),
                 # reach end of seconds
                 If(self.seconds == (60-1),
