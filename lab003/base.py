@@ -1,6 +1,7 @@
 from migen import *
-from migen.build.generic_platform import *
-from migen.build.xilinx import XilinxPlatform
+
+from litex.build.generic_platform import *
+from litex.build.xilinx import XilinxPlatform
 
 from litex.soc.integration.soc_core import *
 from litex.soc.integration.builder import *
@@ -161,7 +162,7 @@ class BaseSoC(SoCCore):
 
         # RGB Led
         self.submodules.rgbled  = RGBLed(platform.request("user_rgb_led",  0))
-        
+
         # Accelerometer
         self.submodules.adxl362 = SPIMaster(platform.request("adxl362_spi"))
 
