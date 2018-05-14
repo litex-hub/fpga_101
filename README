@@ -12,6 +12,8 @@
     fr: http://goo.gl/FScQCJ
  - Lesson-002: Create your first FPGA design
     en: http://goo.gl/mZJvFQ
+ - Lesson-003: Create your first System on Chip
+    en: http://goo.gl/tsKDbF
 
 [> Labs
 -------
@@ -19,6 +21,9 @@
      http://goo.gl/CrHD1P
  - Lab-002: Create a digital clock with FPGA
      http://goo.gl/UaygL4
+ - Lab-003: Create your first System on Chip
+     http://goo.gl/veNGDD
+
 
 [> Contact
 ----------
