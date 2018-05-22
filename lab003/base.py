@@ -136,7 +136,7 @@ class BaseSoC(SoCCore):
         )
 
         # Clock Reset Generation
-        self.submodules.crg = CRG(platform.request("clk100"))
+        self.submodules.crg = CRG(platform.request("clk100"), ~platform.request("cpu_reset"))
 
         # No CPU, use Serial to control Wishbone bus
         self.add_cpu_or_bridge(UARTWishboneBridge(platform.request("serial"), sys_clk_freq, baudrate=115200))
@@ -162,7 +162,7 @@ class BaseSoC(SoCCore):
 
         # RGB Led
         self.submodules.rgbled  = RGBLed(platform.request("user_rgb_led",  0))
-
+        
         # Accelerometer
         self.submodules.adxl362 = SPIMaster(platform.request("adxl362_spi"))
 
