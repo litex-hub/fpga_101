@@ -7,12 +7,12 @@ from migen.build.xilinx import XilinxPlatform
 
 # Info
 # #########################
-# - Completer les questionnaire (en commentant les réponses avec #)
+# - Completer le questionnaire (en commentant les réponses avec #)
 # - Completer le code manquant (indiqué par TODO). (Ne pas oublier la déclaration
 # des submodules: self.submodules += [...])
-# - Renvoyer le code completé à florent@enjoy-digital.fr
+# - Renvoyer le code complété à florent@enjoy-digital.fr
 
-# Si migen n'est pas installé, decommenter les lignes suivantes pour installer
+# Si migen n'est pas installé, décommenter les lignes suivantes pour l'installer
 #os.system("rm -rf migen")
 #os.system("git clone http://github.com/m-labs/migen")
 #os.system("mv migen migen_tmp")
@@ -29,11 +29,11 @@ from migen.build.xilinx import XilinxPlatform
 # se distingue des autres composants plus traditionnels.
 
 
-# 2) Donner 3 exemples d'application où vous utiliseriez un FPGA, en expliquer les
+# 2) Donner 3 exemples d'applications où vous utiliseriez un FPGA, en expliquer les
 # raisons/avantages.
 
 
-# 3) Décrire les differentes étapes d'un flot de conception FPGA.
+# 3) Décrire les différentes étapes d'un flot de conception FPGA.
 
 
 # 4) Dans un FPGA utilisant des LUT4 (4 entrées, 1 sortie)
@@ -123,7 +123,7 @@ class Serializer(Module):
         run = Signal()
         count = Signal(4)
         self.sync += [
-            # If start, set run, clear count
+            # If start, set run and clear count
             # TODO
             # If tick and run, check if count != 9 and increment it if it's the
             # case / clear run it if not.
@@ -235,6 +235,7 @@ content = [
 0x26, 0x0f, 0x4b, 0x71, 0x74, 0x77, 0x6a, 0x73, 
 0x79, 0x0f]
 
+
 class Transmitter(Module):
     """Send sequence of data"""
     def __init__(self):
@@ -242,7 +243,7 @@ class Transmitter(Module):
         self.start = start = Signal() # output
         self.data = data = Signal(8)  # output
 
-        self.decode = Signal(4)
+        self.decode = Signal(4) # input (only to be used after step 6)
 
         # # #
 
@@ -288,13 +289,15 @@ class Transmitter(Module):
 
 # 6) Instancier les modules Transmitter et Serializer dans le design et les 
 # connecter entre eux (start/data). Connecter la pin serial_tx à la sortie tx
-# du module Serializer. Implementer le design et tester sur carte.
+# du module Serializer. Implémenter le design et tester sur carte.
+#
 # Pour visualiser ce que transmet le FPGA, lancer le script:
 # python3(.6) litex_term.py /dev/ttyUSBX
-# Pour reseter le FPGA, appuyer sur le bouton CPU_RESET
+#
+# Pour reseter le FPGA, appuyer sur le bouton cpu_reset
 
 # 7) Renseigner ci-dessous le message transmis par la carte et envoyer par mail
-# ce fichier complété.
+# ce fichier complété pour terminer l'évaluation.
 
 class Design(Module):
     def __init__(self, platform):
