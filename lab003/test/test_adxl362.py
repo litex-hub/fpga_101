@@ -46,7 +46,7 @@ class ADXL362SPI:
     def read(self, addr):
         self.configure()
         val = (0b00001011 << 16) | ((addr & 0xff) << 8)
-        self.regs.adxl362_xfer.write(0b1 | 24*WRITE_LENGTH)
+        self.regs.adxl362_xfer.write(0b1 | 16*WRITE_LENGTH | 8*READ_LENGTH)
         self.regs.adxl362_mosi_data.write(val << (32-24))
         self.regs.adxl362_start.write(1)
         while (self.regs.adxl362_pending.read() & 0x1):
