@@ -73,8 +73,8 @@ class Clock(Module):
         tick = Tick(self.sys_clk_freq, 1)
         self.submodules += tick
 
-        # Display
-        display = Display(self.sys_clk_freq)
+        # SevenSegmentDisplay
+        display = SevenSegmentDisplay(self.sys_clk_freq)
         self.submodules += display
 
         # Core : counts ss/mm/hh
@@ -93,7 +93,7 @@ class Clock(Module):
         self.submodules += bcd_seconds, bcd_minutes, bcd_hours
         # use the generated verilog file
         platform.add_source("bcd.v")
-    
+
         # combinatorial assignement
         self.comb += [
             # Connect tick to core (core timebase)

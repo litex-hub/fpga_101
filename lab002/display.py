@@ -25,7 +25,7 @@ class SevenSegment(Module):
         self.comb += Case(value, cases)
 
 
-class Display(Module):
+class SevenSegmentDisplay(Module):
     def __init__(self, sys_clk_freq, cs_period=0.001):
         # module's interface
         self.values = Array(Signal(5) for i in range(6))  # input
@@ -100,9 +100,9 @@ if __name__ == '__main__':
 
     run_simulation(dut, dut_tb(dut), vcd_name="seven_segment.vcd")
 
-    # Display simulation
-    print("Display simulation")
-    dut = Display(100e6, 0.000001)
+    # SevenSegmentDisplay simulation
+    print("SevenSegmentDisplay simulation")
+    dut = SevenSegmentDisplay(100e6, 0.000001)
     def dut_tb(dut):
         for i in range(4096):
             for j in range(6):

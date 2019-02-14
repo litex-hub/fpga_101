@@ -52,13 +52,13 @@ refers to lesson 002 slides: http://goo.gl/mZJvFQ
  3) Verify Tick period by creating a Led blinker that uses this tick to blink a led and verify on the board.
  4) Execute/Simulate display.py and fill the missing parts of SevenSegment.
  5) Add a SevenSegment to the Clock module, connect it to a counter (incrementing at 1Hz) and verify on the board that it's working.
- 6) Execute/Simulate display.py and fill the missing parts of Display.
- 7) Replace the SevenSegment of the Clock module with a Display module and configure it to display "deadbeef".
+ 6) Execute/Simulate display.py and fill the missing parts of SevenSegmentDisplay.
+ 7) Replace the SevenSegment of the Clock module with a SevenSegmentDisplay module and configure it to display "deadbeef".
  8) Execute/Simulate core.py and fill the missing parts of Core.
  9) Add Core module to the Clock module.
 10) Execute/Simulate bcd.py and fill the missing parts of BCD.
 11) Add BCD submodule to the Clock module (you need one BCD module for each digit). To add a verilog file to the design, use platform.add_source("my_verilog.v")
-12) Connect the Core to the BCD modules and the BCD modules to the Display and test on the board.
+12) Connect the Core to the BCD modules and the BCD modules to the SevenSegmentDisplay and test on the board.
 13) Add a way to configure the clock (at least minutes and hours)
 
 Optional

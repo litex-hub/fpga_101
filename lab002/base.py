@@ -72,7 +72,7 @@ class Clock(Module):
         # -- TO BE COMPLETED --
         # Tick generation : timebase
 
-        # Display
+        # SevenSegmentDisplay
 
         # Core : counts ss/mm/hh
 
@@ -81,7 +81,7 @@ class Clock(Module):
         # Binary Coded Decimal: convert ss/mm/hh to decimal values
 
         # use the generated verilog file
-    
+
         # combinatorial assignement
         self.comb += [
             # Connect tick to core (core timebase)

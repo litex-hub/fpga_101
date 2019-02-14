@@ -43,7 +43,7 @@ class SevenSegment(Module):
         self.comb += Case(value, cases)
 
 
-class Display(Module):
+class SevenSegmentDisplay(Module):
     def __init__(self, sys_clk_freq, cs_period=0.001):
         # module's interface
         self.values = Array(Signal(5) for i in range(6))  # input
@@ -74,12 +74,12 @@ class Display(Module):
         # synchronous assigment
         self.sync += [
             If(self.tick.ce,     # at the next tick:
-                cs[1].eq(cs[0]), # bit1 takes bit0 value 
-                cs[2].eq(cs[1]), # bit2 takes bit1 value 
-                cs[3].eq(cs[2]), # bit3 takes bit2 value 
-                cs[4].eq(cs[3]), # bit4 takes bit3 value 
-                cs[5].eq(cs[4]), # bit5 takes bit4 value 
-                cs[0].eq(cs[5])  # bit0 takes bit5 value 
+                cs[1].eq(cs[0]), # bit1 takes bit0 value
+                cs[2].eq(cs[1]), # bit2 takes bit1 value
+                cs[3].eq(cs[2]), # bit3 takes bit2 value
+                cs[4].eq(cs[3]), # bit4 takes bit3 value
+                cs[5].eq(cs[4]), # bit5 takes bit4 value
+                cs[0].eq(cs[5])  # bit0 takes bit5 value
             )
         ]
         # cominatorial assigment
@@ -123,9 +123,9 @@ if __name__ == '__main__':
 
     run_simulation(dut, dut_tb(dut), vcd_name="seven_segment.vcd")
 
-    # Display simulation
-    print("Display simulation")
-    dut = Display(100e6, 0.000001)
+    # SevenSegmentDisplay simulation
+    print("SevenSegmentDisplay simulation")
+    dut = SevenSegmentDisplay(100e6, 0.000001)
     def dut_tb(dut):
         for i in range(4096):
             for j in range(6):

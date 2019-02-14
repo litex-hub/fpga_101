@@ -11,7 +11,7 @@ from litex.soc.cores import dna, xadc
 from litex.soc.cores.spi import SPIMaster
 
 from ios import Led, RGBLed, Button, Switch
-from display import Display
+from display import SevenSegmentDisplay
 
 #
 # platform
@@ -160,12 +160,12 @@ class BaseSoC(SoCCore):
 
         # RGB Led
         self.submodules.rgbled  = RGBLed(platform.request("user_rgb_led",  0))
-        
+
         # Accelerometer
         self.submodules.adxl362 = SPIMaster(platform.request("adxl362_spi"))
 
-        # Display
-        self.submodules.display = Display(sys_clk_freq)
+        # SevenSegmentDisplay
+        self.submodules.display = SevenSegmentDisplay(sys_clk_freq)
         self.comb += [
             platform.request("display_cs_n").eq(~self.display.cs),
             platform.request("display_abcdefg").eq(~self.display.abcdefg)
