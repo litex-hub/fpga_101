@@ -1,10 +1,10 @@
-      
+
                   __   ___   ___      ___  ___  ____
                  / /  / _ | / _ )____/ _ \/ _ \|_  /
-                / /__/ __ |/ _  /___/ // / // //_ < 
+                / /__/ __ |/ _  /___/ // / // //_ <
                /____/_/ |_/____/    \___/\___/____/
                 Create your first System on Chip
-                                     
+
                   FPGA-101 / Lessons / Labs
                 Copyright 2018 / EnjoyDigital
 
@@ -22,7 +22,7 @@ you can get them with the migen_local_install.py and litex_local_install.py scri
 
 [> Instructions
 ---------------
-1) Fill the missing part of pwm.py. You can execute pwm.py and look at the 
+1) Fill the missing part of pwm.py. You can execute pwm.py and look at the
 generated .vcd (with gtkwave) to verify it's working correctly.
 
 2) Execute base.py to build the design. Load it with load.py. Identify your COM
@@ -32,7 +32,7 @@ provided test scripts are working. (in test directory)
 3) Create a script that recopie the values of the 16 switches to the 16 leds of
 the board.
 
-4) Create a script that do a "knight rider" animation on the 16 leds. (You can 
+4) Create a script that do a "knight rider" animation on the 16 leds. (You can
 find some inspiration here...: https://www.youtube.com/watch?v=oDhnfajh_w4)
 
 5) Create a script that does a equivalent of the Digital Clock we created in last
