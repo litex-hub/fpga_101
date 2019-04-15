@@ -61,7 +61,7 @@ led and see if it behaves as expected.
 [> Infos
 --------
 To communicate with the board over UART, you first need to start the LiteX Server:
-litex_server uart /dev/ttyUSBX
+litex_server --uart --uart-port=/dev/ttyUSBX
 
 You can then execute your test script, for example:
 python3 test_identifier.py
