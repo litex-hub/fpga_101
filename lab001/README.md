@@ -6,7 +6,7 @@
                	        Discover FPGAs
 
                   FPGA-101 / Lessons / Labs
-                Copyright 2018 / EnjoyDigital
+               Copyright 2018-2020 / EnjoyDigital
 
 [> Presentation / Goals
 -----------------------
@@ -26,8 +26,9 @@ The provided base.py example is explained below:
 Migen's imports
 ```python
 from migen import *
-from migen.build.generic_platform import *
-from migen.build.xilinx import XilinxPlatform
+
+from litex.build.generic_platform import *
+from litex.build.xilinx import XilinxPlatform
 ```
 
 IOs definition. During this lab we will add some IOs
@@ -56,7 +57,7 @@ We are not going to change things here during this lab.
 ```python
 class Platform(XilinxPlatform):
     default_clk_name = "clk100"
-    default_clk_period = 10.0
+    default_clk_period = 1e9/100e6
 
     def __init__(self):
         XilinxPlatform.__init__(self, "xc7a100t-CSG324-1", _io, toolchain="vivado")
@@ -67,7 +68,7 @@ class Platform(XilinxPlatform):
 
 We then declare our platform and request the led pin.
 ```python
-# create our platform (fpga interface)
+# Create our platform (fpga interface)
 platform = Platform()
 led = platform.request("user_led")
 ```
@@ -77,10 +78,10 @@ logic to it to create a led blinker:
 - a synchronous assignment to increment the counter.
 - a combinatorial assignment to assign the led.
 ```python
-# create our module (fpga description)
+# Create our module (fpga description)
 module = Module()
 
-# create a counter and blink a led
+# Create a counter and blink a led
 counter = Signal(26)
 module.comb += led.eq(counter[25])
 module.sync += counter.eq(counter + 1)

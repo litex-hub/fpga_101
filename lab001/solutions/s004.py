@@ -1,10 +1,11 @@
-from migen import *
-from migen.build.generic_platform import *
-from migen.build.xilinx import XilinxPlatform
+#!/usr/bin/env python3
 
-#
-# platform
-#
+from migen import *
+
+from litex.build.generic_platform import *
+from litex.build.xilinx import XilinxPlatform
+
+# IOs ----------------------------------------------------------------------------------------------
 
 _io = [
     ("user_led",  0, Pins("H17"), IOStandard("LVCMOS33")),
@@ -48,6 +49,7 @@ _io = [
     ("cpu_reset", 0, Pins("C12"), IOStandard("LVCMOS33")),
 ]
 
+# Platform -----------------------------------------------------------------------------------------
 
 class Platform(XilinxPlatform):
     default_clk_name = "clk100"
@@ -59,15 +61,12 @@ class Platform(XilinxPlatform):
     def do_finalize(self, fragment):
         XilinxPlatform.do_finalize(self, fragment)
 
-#
-# design
-#
+# Design -------------------------------------------------------------------------------------------
 
-
-# create our platform (fpga interface)
+# Create our platform (fpga interface)
 platform = Platform()
 
-# create our module (fpga description)
+# Create our module (fpga description)
 class Switches(Module):
     def __init__(self, platform):     
         # synchronous assignments
@@ -84,8 +83,7 @@ class Switches(Module):
 
 module = Switches(platform)
 
-#
-# build
-#
+# Build --------------------------------------------------------------------------------------------
 
 platform.build(module)
+
