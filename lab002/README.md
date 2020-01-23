@@ -7,7 +7,7 @@
                	Create a digital clock with FPGA
 
                   FPGA-101 / Lessons / Labs
-                Copyright 2018 / EnjoyDigital
+              Copyright 2018-2020 / EnjoyDigital
 
 [> Presentation / Goals
 -----------------------

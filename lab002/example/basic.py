@@ -10,11 +10,11 @@ class MyModule(Module):
 		d = Signal()
 		q = Signal()
 
-		# combinatorial logic
+		# Combinatorial logic
 		self.comb += [
 			self.o.eq(q),
 			d.eq(~q)
 		]
 
-		# synchronous logic
+		# Synchronous logic
 		self.sync += d.eq(q)

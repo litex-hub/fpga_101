@@ -3,24 +3,26 @@ from migen.fhdl import verilog
 
 # https://en.wikipedia.org/wiki/Double_dabble
 
+# _BCD ---------------------------------------------------------------------------------------------
+
 class _BCD(Module):
     def __init__(self):
-        # module's interface
-        self.value = Signal(8)     # input
+        # Module's interface
+        self.value    = Signal(8)  # input
         self.hundreds = Signal(4)  # output
-        self.tens = Signal(4)      # output
-        self.ones = Signal(4)      # output
+        self.tens     = Signal(4)  # output
+        self.ones     = Signal(4)  # output
 
         # # #
 
         hundreds = Signal(4)
-        tens = Signal(4)
-        ones = Signal(4)
+        tens     = Signal(4)
+        ones     = Signal(4)
         for i in reversed(range(8)):
-            # add 3 to columns if >= 5
+            # Add 3 to columns if >= 5
             _hundreds = Signal(4)
-            _tens = Signal(4)
-            _ones = Signal(4)
+            _tens     = Signal(4)
+            _ones     = Signal(4)
             self.comb += [
                 _hundreds.eq(hundreds),
                 If(hundreds >= 5,
@@ -43,8 +45,8 @@ class _BCD(Module):
             ]
             # shift left one
             next_hundreds = Signal(4)
-            next_tens = Signal(4)
-            next_ones = Signal(4)
+            next_tens     = Signal(4)
+            next_ones     = Signal(4)
             self.comb += [
                 next_hundreds[1:].eq(_hundreds),
                 next_hundreds[0].eq(_tens[3]),
@@ -54,8 +56,8 @@ class _BCD(Module):
                 next_ones[0].eq(self.value[i])
             ]
             hundreds = next_hundreds
-            tens = next_tens
-            ones = next_ones
+            tens     = next_tens
+            ones     = next_ones
 
         self.comb += [
             self.hundreds.eq(hundreds),
@@ -63,11 +65,12 @@ class _BCD(Module):
             self.ones.eq(ones)
         ]
 
+# BCD ----------------------------------------------------------------------------------------------
 
 class BCD(Module):
     def __init__(self):
         # -- TO BE COMPLETED --
-        self.my_input = Signal()   # input
+        self.my_input  = Signal()  # input
         self.my_output = Signal()  # output
 
         # # #
@@ -79,6 +82,7 @@ class BCD(Module):
 
         # -- TO BE COMPLETED --
 
+# Main ---------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
     # BCD simulation
@@ -91,7 +95,7 @@ if __name__ == '__main__':
     def dut_tb(dut):
         for i in range(256):
             # -- TO BE COMPLETED --
-            # [...] stimulate design to verify that BCD module is working
+            # [...] Stimulate design to verify that BCD module is working
             # -- TO BE COMPLETED --
             yield
 
@@ -103,4 +107,4 @@ if __name__ == '__main__':
     ios = {module.value, module.hundreds, module.tens, module.ones}
     f = open("bcd.v", "w")
     f.write(verilog.convert(module, ios, name="bcd").main_source)
-    f.close()    
+    f.close()

@@ -1,17 +1,17 @@
+#!/usr/bin/env python3
+
 from migen import *
-from migen.build.generic_platform import *
-from migen.build.xilinx import XilinxPlatform
 from migen.genlib.cdc import MultiReg
+
+from litex.build.generic_platform import *
+from litex.build.xilinx import XilinxPlatform
 
 from tick import *
 from display import *
 from bcd import *
 from core import *
 
-
-#
-# platform
-#
+# IOs ----------------------------------------------------------------------------------------------
 
 _io = [
     ("user_led",  0, Pins("H17"), IOStandard("LVCMOS33")),
@@ -29,22 +29,18 @@ _io = [
     ("display_abcdefg",  0, Pins("T10 R10 K16 K13 P15 T11 L18 H15"), IOStandard("LVCMOS33")),
 ]
 
+# Platform -----------------------------------------------------------------------------------------
 
 class Platform(XilinxPlatform):
-    default_clk_name = "clk100"
-    default_clk_period = 10.0
+    default_clk_name   = "clk100"
+    default_clk_period = 1e9/100e6
 
     def __init__(self):
-        XilinxPlatform.__init__(self, "xc7a100t-CSG324-1", _io, toolchain="vivado")
+        XilinxPlatform.__init__(self, "xc7a100t-csg324-1", _io, toolchain="vivado")
 
-    def do_finalize(self, fragment):
-        XilinxPlatform.do_finalize(self, fragment)
+# Design -------------------------------------------------------------------------------------------
 
-#
-# design
-#
-
-# user button detection
+# User button detection
 class UserButtonPress(Module):
     def __init__(self, user_btn):
         self.rising = Signal()
@@ -62,10 +58,10 @@ class UserButtonPress(Module):
             self.rising.eq(_user_btn & ~_user_btn_d)
         ]
 
-# create our platform (fpga interface)
+# Create our platform (fpga interface)
 platform = Platform()
 
-# create our main module (fpga description)
+# Create our main module (fpga description)
 class Clock(Module):
     sys_clk_freq = int(100e6)
     def __init__(self):
@@ -103,8 +99,6 @@ class Clock(Module):
 
 module = Clock()
 
-#
-# build
-#
+# Build --------------------------------------------------------------------------------------------
 
 platform.build(module)

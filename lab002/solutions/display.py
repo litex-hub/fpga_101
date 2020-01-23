@@ -8,16 +8,17 @@ from tick import Tick
 # - understand how to multiplex displays
 # - use python capabilities to create visual simulations
 
+# SevenSegment -------------------------------------------------------------------------------------
 
 class SevenSegment(Module):
     def __init__(self):
-        # module's interface
-        self.value = value = Signal(4)         # input
-        self.abcdefg = abcdefg = Signal(7)      # output
+        # Module's interface
+        self.value   = value = Signal(4)         # input
+        self.abcdefg = abcdefg = Signal(7)     # output
 
         # # #
 
-        # value to abcd segments dictionary.
+        # Value to abcd segments dictionary.
         # Here we create a table to translate each of the 16 possible input
         # values to abdcefg segments control.
         cases = {
@@ -39,13 +40,14 @@ class SevenSegment(Module):
           0xf: abcdefg.eq(0b1110001),
         }
 
-        # combinatorial assignement
+        # Combinatorial assignement
         self.comb += Case(value, cases)
 
+# SevenSegmentDisplay ------------------------------------------------------------------------------
 
 class SevenSegmentDisplay(Module):
     def __init__(self, sys_clk_freq, cs_period=0.001):
-        # module's interface
+        # Module's interface
         self.values = Array(Signal(5) for i in range(6))  # input
 
         self.cs = Signal(6)      # output
@@ -53,15 +55,15 @@ class SevenSegmentDisplay(Module):
 
         # # #
 
-        # create our seven segment controller
+        # Create our seven segment controller
         seven_segment = SevenSegment()
         self.submodules += seven_segment
         self.comb += self.abcdefg.eq(seven_segment.abcdefg)
 
-        # create a tick every cs_period
+        # Create a tick every cs_period
         self.submodules.tick = Tick(sys_clk_freq, cs_period)
 
-        # rotate cs 6 bits signals to alternate seven segments
+        # Rotate cs 6 bits signals to alternate seven segments
 		# cycle 0 : 0b000001
 	    # cycle 1 : 0b000010
 	    # cycle 2 : 0b000100
@@ -71,9 +73,9 @@ class SevenSegmentDisplay(Module):
 	    # cycle 6 : 0b100000
 		# cycle 7 : 0b000001
         cs = Signal(6, reset=0b000001)
-        # synchronous assigment
+        # Synchronous assigment
         self.sync += [
-            If(self.tick.ce,     # at the next tick:
+            If(self.tick.ce,     # At the next tick:
                 cs[1].eq(cs[0]), # bit1 takes bit0 value
                 cs[2].eq(cs[1]), # bit2 takes bit1 value
                 cs[3].eq(cs[2]), # bit3 takes bit2 value
@@ -82,11 +84,11 @@ class SevenSegmentDisplay(Module):
                 cs[0].eq(cs[5])  # bit0 takes bit5 value
             )
         ]
-        # cominatorial assigment
+        # Combinatorial assigment
         self.comb += self.cs.eq(cs)
 
         # cs to value selection.
-        # Here we create a table to translate each of the 6 cs possible values
+        # Here we create a table to translate each of the 8 cs possible values
         # to input value selection.
         cases = {
             0b000001 : seven_segment.value.eq(self.values[0]),
@@ -96,13 +98,14 @@ class SevenSegmentDisplay(Module):
             0b010000 : seven_segment.value.eq(self.values[4]),
             0b100000 : seven_segment.value.eq(self.values[5])
         }
-        # cominatorial assigment
+        # Combinatorial assigment
         self.comb += Case(self.cs, cases)
 
+# Main ---------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
-    # seven segment simulation
-    print("Seven Segment simulation")
+    # SevenSegment simulation
+    print("SevenSegment simulation")
     dut = SevenSegment()
 
     def show_seven_segment(abcdefg):

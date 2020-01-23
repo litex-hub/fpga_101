@@ -16,25 +16,26 @@ from migen import *
 #
 # or try both...
 
+# Core ---------------------------------------------------------------------------------------------
 
 class Core(Module):
     def __init__(self):
-        # module's interface
+        # Module's interface
         self.tick = Signal()     # input
         self.seconds = Signal(6) # output
         self.minutes = Signal(6) # output
         self.hours = Signal(5)   # output
 
-        # set interface
+        # Set interface
         self.inc_minutes = Signal() # input
         self.inc_hours = Signal()   # output
 
         # # #
 
-        # synchronous assigment
+        # Synchronous assigment
         self.sync += [
             # -- TO BE COMPLETED --
-            # at each tick
+            # At each tick
             If(self.tick,
                 self.seconds.eq(self.seconds + 1),
                 # [...]
@@ -42,25 +43,25 @@ class Core(Module):
             # -- TO BE COMPLETED --
         ]
 
+# CoreFSM ------------------------------------------------------------------------------------------
 
 class CoreFSM(Module):
     def __init__(self):
-        # module's interface
-        self.tick = Signal()     # input
+        # Module's interface
+        self.tick    = Signal()  # input
         self.seconds = Signal(6) # output
         self.minutes = Signal(6) # output
-        self.hours = Signal(5)   # output
+        self.hours   = Signal(5) # output
 
-        # set interface
+        # Set interface
         self.inc_minutes = Signal() # input
-        self.inc_hours = Signal()   # output
+        self.inc_hours   = Signal() # output
 
         # # #
 
-        fsm = FSM(reset_state="IDLE")
-        self.submodules += fsm
+        self.submodules.fsm = fsm = FSM(reset_state="IDLE")
 
-        # -- TO BE COMPLETED -- 
+        # -- TO BE COMPLETED --
         fsm.act("IDLE",
             If(self.tick,
                 NextState("INC_SECONDS")
@@ -80,12 +81,14 @@ class CoreFSM(Module):
         fsm.act("INC_HOURS",
            NextState("IDLE")
         )
-		# -- TO BE COMPLETED -- 
+		# -- TO BE COMPLETED --
+
+# Main ---------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
-    # seven segment simulation
+    # Seven segment simulation
     print("Core simulation")
-    # uncomment the one you want to simulate
+    # Uncomment the one you want to simulate
     dut = Core()
     #dut = CoreFSM()
 
@@ -93,12 +96,12 @@ if __name__ == '__main__':
         print("cycle %d: hh:%02d, mm:%02d, ss:%02d" %(cycle, hours, minutes, seconds))
 
     def dut_tb(dut):
-        yield dut.tick.eq(1) # tick active on each cycle
+        yield dut.tick.eq(1) # Tick active on each cycle
         for i in range(3600*48):
             yield
             show_time(i,
-                      (yield dut.hours),
-                      (yield dut.minutes),
-                      (yield dut.seconds))
+                (yield dut.hours),
+                (yield dut.minutes),
+                (yield dut.seconds))
 
     run_simulation(dut, dut_tb(dut), vcd_name="core.vcd")

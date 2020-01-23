@@ -30,9 +30,9 @@ class MyModule(Module):
             self.o.eq(my_submodule.o)
         ]
 
-# create module
+# Create module
 module = MyModule()
 
-# generate verilog
+# Generate verilog
 ios = {module.i, module.o}
 print(verilog.convert(module, ios))
