@@ -4,11 +4,12 @@ from tick import Tick
 
 from litex.soc.interconnect.csr import *
 
+# _SevenSegment ------------------------------------------------------------------------------------
 
 class _SevenSegment(Module):
     def __init__(self):
-        # module's interface
-        self.value = value = Signal(4)      # input
+        # Module's interface
+        self.value   = value   = Signal(4)  # input
         self.abcdefg = abcdefg = Signal(7)  # output
 
         # # #
@@ -35,29 +36,30 @@ class _SevenSegment(Module):
           0xf: abcdefg.eq(0b1110001),
         }
 
-        # combinatorial assignement
+        # Combinatorial assignement
         self.comb += Case(value, cases)
 
+# _SevenSegmentDisplay -----------------------------------------------------------------------------
 
 class _SevenSegmentDisplay(Module):
     def __init__(self, sys_clk_freq, cs_period=0.001):
-        # module's interface
+        # Module's interface
         self.values = Array(Signal(5) for i in range(6))  # input
 
-        self.cs = Signal(6)      # output
+        self.cs      = Signal(6) # output
         self.abcdefg = Signal(7) # output
 
         # # #
 
-        # create our seven segment controller
+        # Create our seven segment controller
         seven_segment = _SevenSegment()
         self.submodules += seven_segment
         self.comb += self.abcdefg.eq(seven_segment.abcdefg)
 
-        # create a tick every cs_period
+        # Create a tick every cs_period
         self.submodules.tick = Tick(sys_clk_freq, cs_period)
 
-        # rotate cs 6 bits signals to alternate seven segments
+        # Rotate cs 6 bits signals to alternate seven segments
         # cycle 0 : 0b000001
         # cycle 1 : 0b000010
         # cycle 2 : 0b000100
@@ -68,7 +70,7 @@ class _SevenSegmentDisplay(Module):
         cs = Signal(6, reset=0b000001)
         # synchronous assigment
         self.sync += [
-            If(self.tick.ce,     # at the next tick:
+            If(self.tick.ce,     # At the next tick:
                 cs[1].eq(cs[0]), # bit1 takes bit0 value
                 cs[2].eq(cs[1]), # bit2 takes bit1 value
                 cs[3].eq(cs[2]), # bit3 takes bit2 value
@@ -77,7 +79,7 @@ class _SevenSegmentDisplay(Module):
                 cs[0].eq(cs[5])  # bit0 takes bit5 value
             )
         ]
-        # cominatorial assigment
+        # Combinatorial assigment
         self.comb += self.cs.eq(cs)
 
         # cs to value selection.
@@ -91,17 +93,18 @@ class _SevenSegmentDisplay(Module):
             0b010000 : seven_segment.value.eq(self.values[4]),
             0b100000 : seven_segment.value.eq(self.values[5])
         }
-        # cominatorial assigment
+        # Combinatorial assigment
         self.comb += Case(self.cs, cases)
 
+# SevenSegmentDisplay ------------------------------------------------------------------------------
 
 class SevenSegmentDisplay(Module, AutoCSR):
     def __init__(self, sys_clk_freq):
-        self.sel = CSRStorage(4)
+        self.sel   = CSRStorage(4)
         self.value = CSRStorage(4)
         self.write = CSR()
 
-        self.cs = Signal(6)      # output
+        self.cs      = Signal(6) # output
         self.abcdefg = Signal(7) # output
 
         # # #
@@ -131,10 +134,11 @@ class SevenSegmentDisplay(Module, AutoCSR):
             )
         ]
 
+# Main ---------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
-    # seven segment simulation
-    print("Seven Segment simulation")
+    # SevenSegment simulation
+    print("SevenSegment simulation")
     dut = _SevenSegment()
 
     def show_seven_segment(abcdefg):
