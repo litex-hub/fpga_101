@@ -6,7 +6,7 @@
                 Use your first FPGA Soft Core CPU
 
                   FPGA-101 / Lessons / Labs
-                Copyright 2018 / EnjoyDigital
+              Copyright 2018-2020 / EnjoyDigital
 
 [> Presentation / Goals
 -----------------------
