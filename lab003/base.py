@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from migen import *
 
 from litex.build.generic_platform import *
@@ -12,9 +14,7 @@ from litex.soc.cores.spi import SPIMaster
 from ios import Led, RGBLed, Button, Switch
 from display import SevenSegmentDisplay
 
-#
-# platform
-#
+# IOs ----------------------------------------------------------------------------------------------
 
 _io = [
     ("user_led",  0, Pins("H17"), IOStandard("LVCMOS33")),
@@ -78,7 +78,7 @@ _io = [
     ),
 
     ("adxl362_spi", 0,
-    	Subsignal("cs_n", Pins("D15")),
+        Subsignal("cs_n", Pins("D15")),
         Subsignal("clk", Pins("F15")),
         Subsignal("mosi", Pins("F14")),
         Subsignal("miso", Pins("E15")),
@@ -87,97 +87,81 @@ _io = [
 
 ]
 
+# Platform -----------------------------------------------------------------------------------------
 
 class Platform(XilinxPlatform):
-    default_clk_name = "clk100"
-    default_clk_period = 10.0
+    default_clk_name   = "clk100"
+    default_clk_period = 1e9/100e6
 
     def __init__(self):
-        XilinxPlatform.__init__(self, "xc7a100t-CSG324-1", _io, toolchain="vivado")
+        XilinxPlatform.__init__(self, "xc7a100t-csg324-1", _io, toolchain="vivado")
 
-    def do_finalize(self, fragment):
-        XilinxPlatform.do_finalize(self, fragment)
+# Design -------------------------------------------------------------------------------------------
 
-#
-# design
-#
-
-def csr_map_update(csr_map, csr_peripherals):
-    csr_map.update(dict((n, v)
-        for v, n in enumerate(csr_peripherals, start=max(csr_map.values()) + 1)))
-
-# create our platform (fpga interface)
+# Create our platform (fpga interface)
 platform = Platform()
 
-# create our soc (fpga description)
-class BaseSoC(SoCCore):
-    # Peripherals CSR declaration
-    csr_peripherals = [
-        "dna",
-        "xadc",
-        "rgbled",
-        "leds",
-        "switches",
-        "buttons",
-        "adxl362",
-        "display"
-    ]
-    csr_map_update(SoCCore.csr_map, csr_peripherals)
-
+# Create our soc (fpga description)
+class BaseSoC(SoCMini):
     def __init__(self, platform, **kwargs):
         sys_clk_freq = int(100e6)
-        # SoC init (No CPU, we controlling the SoC with UART)
-        SoCCore.__init__(self, platform, sys_clk_freq,
-            cpu_type=None,
-            csr_data_width=32,
-            with_uart=False,
-            with_timer=False,
-            ident="My first System On Chip", ident_version=True,
-        )
+
+        # SoCMini (No CPU, we are controlling the SoC over UART)
+        SoCMini.__init__(self, platform, sys_clk_freq, csr_data_width=32,
+            ident="My first LiteX System On Chip", ident_version=True)
 
         # Clock Reset Generation
         self.submodules.crg = CRG(platform.request("clk100"), ~platform.request("cpu_reset"))
 
         # No CPU, use Serial to control Wishbone bus
-        self.add_cpu_or_bridge(UARTWishboneBridge(platform.request("serial"), sys_clk_freq, baudrate=115200))
-        self.add_wb_master(self.cpu_or_bridge.wishbone)
+        self.submodules.serial_bridge = UARTWishboneBridge(platform.request("serial"), sys_clk_freq)
+        self.add_wb_master(self.serial_bridge.wishbone)
 
         # FPGA identification
         self.submodules.dna = dna.DNA()
+        self.add_csr("dna")
 
         # FPGA Temperature/Voltage
         self.submodules.xadc = xadc.XADC()
+        self.add_csr("xadc")
 
         # Led
         user_leds = Cat(*[platform.request("user_led", i) for i in range(16)])
         self.submodules.leds = Led(user_leds)
+        self.add_csr("leds")
 
         # Switches
         user_switches = Cat(*[platform.request("user_sw", i) for i in range(16)])
         self.submodules.switches = Switch(user_switches)
+        self.add_csr("switches")
 
         # Buttons
         user_buttons = Cat(*[platform.request("user_btn", i) for i in range(5)])
         self.submodules.buttons = Button(user_buttons)
+        self.add_csr("buttons")
 
         # RGB Led
         self.submodules.rgbled  = RGBLed(platform.request("user_rgb_led",  0))
+        self.add_csr("rgbled")
 
         # Accelerometer
-        self.submodules.adxl362 = SPIMaster(platform.request("adxl362_spi"))
+        self.submodules.adxl362 = SPIMaster(platform.request("adxl362_spi"),
+            data_width   = 32,
+            sys_clk_freq = sys_clk_freq,
+            spi_clk_freq = 1e6)
+        self.add_csr("adxl362")
 
         # SevenSegmentDisplay
         self.submodules.display = SevenSegmentDisplay(sys_clk_freq)
+        self.add_csr("display")
         self.comb += [
             platform.request("display_cs_n").eq(~self.display.cs),
             platform.request("display_abcdefg").eq(~self.display.abcdefg)
         ]
 
-
 soc = BaseSoC(platform)
 
-#
-# build
-#
+# Build --------------------------------------------------------------------------------------------
+
 builder = Builder(soc, output_dir="build", csr_csv="test/csr.csv")
 builder.build()

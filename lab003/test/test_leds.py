@@ -10,13 +10,13 @@ wb.open()
 
 # # #
 
-# test led
+# Test led
 print("Testing Led...")
 for i in range(64):
     wb.regs.leds_out.write(i)
     time.sleep(0.1)
 
-# test rgb led pwm
+# Test rgb led pwm
 print("Testing RGB Led (PWM)...")
 wb.regs.rgbled_r_period.write(64*1024)
 wb.regs.rgbled_r_enable.write(1)
@@ -29,7 +29,7 @@ for i in range(4):
         time.sleep(0.01)
 wb.regs.rgbled_r_enable.write(0)
 
-# test rgb led random
+# Test rgb led random
 print("Testing RGB Led (Random)...")
 prng = random.Random(42)
 brightness = 10

@@ -5,8 +5,7 @@ from litex.soc.cores import gpio
 
 from pwm import PWM
 
-# see:
-# https://github.com/enjoy-digital/litex/blob/master/litex/soc/cores/gpio.py
+# See: https://github.com/enjoy-digital/litex/blob/master/litex/soc/cores/gpio.py
 
 class Led(gpio.GPIOOut):
     pass

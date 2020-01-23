@@ -6,7 +6,7 @@
                 Create your first System on Chip
 
                   FPGA-101 / Lessons / Labs
-                Copyright 2018 / EnjoyDigital
+              Copyright 2018-2020 / EnjoyDigital
 
 [> Presentation / Goals
 -----------------------
@@ -17,7 +17,7 @@ We will see how to create simple peripherals (Led, Buttons, Switches, PWM, SPI)
 and control them directly from the Host computer.
 
 For this tutorial, we will need Migen and LiteX. If not install on your computer,
-you can get them with the migen_local_install.py and litex_local_install.py scripts.
+you can get them with the ./litex_setup.py init install --user.
 
 
 [> Instructions
@@ -66,7 +66,7 @@ litex_server --uart --uart-port=/dev/ttyUSBX
 You can then execute your test script, for example:
 python3 test_identifier.py
 should return something like:
-"fpga_id: My first System On Chip 2018-05-14 08:55:41"
+"fpga_id: My first LiteX System On Chip 2018-05-14 08:55:41"
 
 While generating the desing, LiteX generate a csr.csv file that will be used to
 know the available peripherals and their address. This file is located in test.

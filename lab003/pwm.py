@@ -2,7 +2,6 @@ from migen import *
 
 from litex.soc.interconnect.csr import *
 
-
 # Pulse Width Modulation
 # https://en.wikipedia.org/wiki/Pulse-width_modulation
 #     ________              ________
@@ -10,10 +9,12 @@ from litex.soc.interconnect.csr import *
 #    <-width->
 #    <--------period------->
 
+# _PWM ---------------------------------------------------------------------------------------------
+
 class _PWM(Module, AutoCSR):
     def __init__(self, pwm):
         self.enable = enable = Signal()
-        self.width = width = Signal(32)
+        self.width  = width  = Signal(32)
         self.period = period = Signal(32)
 
         # # #
@@ -37,11 +38,12 @@ class _PWM(Module, AutoCSR):
             )
         ]
 
+# PWM ----------------------------------------------------------------------------------------------
 
 class PWM(Module, AutoCSR):
     def __init__(self, pwm):
         self.enable = CSRStorage()
-        self.width = CSRStorage(32)
+        self.width  = CSRStorage(32)
         self.period = CSRStorage(32)
 
         # # #
@@ -55,6 +57,7 @@ class PWM(Module, AutoCSR):
             _pwm.period.eq(self.period.storage)
         ]
 
+# Main ---------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
     pwm = Signal()
