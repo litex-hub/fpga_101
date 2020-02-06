@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from litex.soc.tools.remote import RemoteClient
+from litex import RemoteClient
 
 wb = RemoteClient()
 wb.open()
