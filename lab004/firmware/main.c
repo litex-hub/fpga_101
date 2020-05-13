@@ -122,8 +122,10 @@ static void console_service(void)
 
 int main(void)
 {
+#ifdef CONFIG_CPU_HAS_INTERRUPT
 	irq_setmask(0);
 	irq_setie(1);
+#endif
 	uart_init();
 
 	puts("\nLab004 - CPU testing software built "__DATE__" "__TIME__"\n");
