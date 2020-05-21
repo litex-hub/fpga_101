@@ -5,6 +5,10 @@
                      FPGA-101 / Lessons / Labs
                Copyright 2018-2020 / EnjoyDigital
 
+[> Install LiteX
+----------------
+Follow: https://github.com/enjoy-digital/litex/wiki/Installation
+
 [> Lessons
 ----------
  - Lesson-001: Discover FPGAs
