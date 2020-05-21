@@ -164,4 +164,4 @@ soc = BaseSoC(platform)
 # Build --------------------------------------------------------------------------------------------
 
 builder = Builder(soc, output_dir="build", csr_csv="test/csr.csv")
-builder.build()
+builder.build(build_name="top")
