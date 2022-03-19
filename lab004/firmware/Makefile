@@ -15,14 +15,15 @@ all: firmware.bin
 	chmod -x $@
 
 firmware.elf: $(OBJECTS)
-	$(LD) $(LDFLAGS) \
+	$(CC) $(LDFLAGS) \
 		-T linker.ld \
 		-N -o $@ \
-		 $(BUILD_DIR)/software/libbase/crt0.o \
+		 $(BUILD_DIR)/software/bios/crt0.o \
 		$(OBJECTS) \
 		-L$(BUILD_DIR)/software/libbase \
 		-L$(BUILD_DIR)/software/libcompiler_rt \
-		-lbase-nofloat -lcompiler_rt
+		-L$(BUILD_DIR)/software/libc \
+		-lbase -lcompiler_rt -lc
 	chmod -x $@
 
 main.o: main.c
