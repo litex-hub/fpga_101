@@ -18,16 +18,16 @@ firmware.elf: $(OBJECTS)
 	$(CC) $(LDFLAGS) \
 		-T linker.ld \
 		-N -o $@ \
-		 $(BUILD_DIR)/software/bios/crt0.o \
 		$(OBJECTS) \
-		-L$(BUILD_DIR)/software/libbase \
-		-L$(BUILD_DIR)/software/libcompiler_rt \
-		-L$(BUILD_DIR)/software/libc \
-		-lbase -lcompiler_rt -lc
+		$(PACKAGES:%=-L$(BUILD_DIR)/software/%) \
+		$(LIBS:lib%=-l%)
 	chmod -x $@
 
 main.o: main.c
 	$(compile)
+
+crt0.o: $(CPU_DIRECTORY)/crt0.S
+	$(assemble)
 
 %.o: %.c
 	$(compile)
