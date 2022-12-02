@@ -295,7 +295,7 @@ class Transmitter(Module):
 # du module Serializer. Implémenter le design et tester sur carte.
 #
 # Pour visualiser ce que transmet le FPGA, lancer le script:
-# lxterm /dev/ttyUSBX
+# litex_term /dev/ttyUSBX
 #
 # Pour reseter le FPGA, appuyer sur le bouton cpu_reset
 

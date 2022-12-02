@@ -26,7 +26,7 @@ you can get them with the ./litex_setup.py init install --user.
 2) Compile the CPU firmware:
   - cd firmware && make all
 3) Start the LiteX Terminal:
-  - python3(.6) lxterm /dev/ttyUSBX --kernel firmware/firmware.bin
+  - python3(.6) litex_term /dev/ttyUSBX --kernel firmware/firmware.bin
 4) Verify that you are able to interact with the CPU (help for available commands)
 and test the display and led.
 5) Create a switches_test that recopie the values of the 16 switches to the 16
@@ -50,7 +50,7 @@ led and see if it behaves as expected.
 [> Infos
 --------
 To load the firmware to the board:
-lxterm /dev/ttyUSBX --kernel firmware/firmware.bin
+litex_term /dev/ttyUSBX --kernel firmware/firmware.bin
 then enter "reboot" or press cpu_reset button.
 
 While generating the desing, LiteX generate a csr.h that will be used to
