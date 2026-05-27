@@ -28,7 +28,7 @@ class SevenSegment(Module):
         }
         # -- TO BE COMPLETED --
 
-        # Combinatorial assignement
+        # Combinatorial assignment
         self.comb += Case(value, cases)
 
 # SevenSegmentDisplay ------------------------------------------------------------------------------
@@ -61,7 +61,7 @@ class SevenSegmentDisplay(Module):
 	    # cycle 6 : 0b100000
 		# cycle 7 : 0b000001
         cs = Signal(6, reset=0b000001)
-        # Synchronous assigment
+        # Synchronous assignment
         self.sync += [
             If(self.tick.ce,
                 # -- TO BE COMPLETED --
@@ -69,7 +69,7 @@ class SevenSegmentDisplay(Module):
                 # -- TO BE COMPLETED --
             )
         ]
-        # Combinatorial assigment
+        # Combinatorial assignment
         self.comb += self.cs.eq(cs)
 
         # cs to value selection.
@@ -81,7 +81,7 @@ class SevenSegmentDisplay(Module):
             # [...]
         }
         # -- TO BE COMPLETED --
-        # Combinatorial assigment
+        # Combinatorial assignment
         self.comb += Case(self.cs, cases)
 
 # Main ---------------------------------------------------------------------------------------------

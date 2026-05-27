@@ -9,7 +9,7 @@ class MySubmodule(Module):
 
         # # #
 
-        # combinatorial assignement
+        # Combinatorial assignment
         self.comb += self.o.eq(self.i + 1)
 
 
@@ -24,7 +24,7 @@ class MyModule(Module):
         my_submodule = MySubmodule()
         self.submodules += my_submodule
 
-        # combinatorial assignement
+        # Combinatorial assignment
         self.comb += [
             my_submodule.i.eq(self.i),
             self.o.eq(my_submodule.o)
@@ -33,6 +33,6 @@ class MyModule(Module):
 # Create module
 module = MyModule()
 
-# Generate verilog
+# Generate Verilog
 ios = {module.i, module.o}
 print(verilog.convert(module, ios))

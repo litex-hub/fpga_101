@@ -40,7 +40,7 @@ class SevenSegment(Module):
           0xf: abcdefg.eq(0b1110001),
         }
 
-        # Combinatorial assignement
+        # Combinatorial assignment
         self.comb += Case(value, cases)
 
 # SevenSegmentDisplay ------------------------------------------------------------------------------
@@ -73,7 +73,7 @@ class SevenSegmentDisplay(Module):
 	    # cycle 6 : 0b100000
 		# cycle 7 : 0b000001
         cs = Signal(6, reset=0b000001)
-        # Synchronous assigment
+        # Synchronous assignment
         self.sync += [
             If(self.tick.ce,     # At the next tick:
                 cs[1].eq(cs[0]), # bit1 takes bit0 value
@@ -84,7 +84,7 @@ class SevenSegmentDisplay(Module):
                 cs[0].eq(cs[5])  # bit0 takes bit5 value
             )
         ]
-        # Combinatorial assigment
+        # Combinatorial assignment
         self.comb += self.cs.eq(cs)
 
         # cs to value selection.
@@ -98,7 +98,7 @@ class SevenSegmentDisplay(Module):
             0b010000 : seven_segment.value.eq(self.values[4]),
             0b100000 : seven_segment.value.eq(self.values[5])
         }
-        # Combinatorial assigment
+        # Combinatorial assignment
         self.comb += Case(self.cs, cases)
 
 # Main ---------------------------------------------------------------------------------------------

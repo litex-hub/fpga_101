@@ -32,7 +32,7 @@ class Core(Module):
 
         # # #
 
-        # Synchronous assigment
+        # Synchronous assignment
         self.sync += [
             # -- TO BE COMPLETED --
             # At each tick

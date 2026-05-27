@@ -9,7 +9,7 @@ class Blink(Module):
         # combinatorial assignment
         self.comb += led.eq(counter[25])
 
-        # synchronous assignement
+        # Synchronous assignment
         self.sync += counter.eq(counter + 1)
 
 # Create our platform

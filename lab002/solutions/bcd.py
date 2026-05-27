@@ -43,7 +43,7 @@ class _BCD(Module):
                      _ones.eq(ones)
                 ),
             ]
-            # shift left one
+            # Shift left one
             next_hundreds = Signal(4)
             next_tens     = Signal(4)
             next_ones     = Signal(4)
@@ -69,18 +69,19 @@ class _BCD(Module):
 
 class BCD(Module):
     def __init__(self):
-        # -- TO BE COMPLETED --
-        self.my_input  = Signal()  # input
-        self.my_output = Signal()  # output
+        # Module's interface
+        self.value    = Signal(8)  # input
+        self.hundreds = Signal(4)  # output
+        self.tens     = Signal(4)  # output
+        self.ones     = Signal(4)  # output
 
         # # #
 
-        # Instance of the BCD migen module
         self.specials += Instance("bcd",
-            i_my_input=self.my_input,
-            o_my_output=self.my_output)
-
-        # -- TO BE COMPLETED --
+            i_value    = self.value,
+            o_hundreds = self.hundreds,
+            o_tens     = self.tens,
+            o_ones     = self.ones)
 
 # Main ---------------------------------------------------------------------------------------------
 
@@ -94,10 +95,13 @@ if __name__ == '__main__':
 
     def dut_tb(dut):
         for i in range(256):
-            # -- TO BE COMPLETED --
-            # [...] Stimulate design to verify that BCD module is working
-            # -- TO BE COMPLETED --
+            yield dut.value.eq(i)
             yield
+            hundreds = (yield dut.hundreds)
+            tens     = (yield dut.tens)
+            ones     = (yield dut.ones)
+            assert hundreds*100 + tens*10 + ones == i
+            show_bcd(i, hundreds, tens, ones)
 
     run_simulation(dut, dut_tb(dut), vcd_name="bcd.vcd")
 
@@ -105,6 +109,5 @@ if __name__ == '__main__':
     print("BCD Verilog generation")
     module = _BCD()
     ios = {module.value, module.hundreds, module.tens, module.ones}
-    f = open("bcd.v", "w")
-    f.write(verilog.convert(module, ios, name="bcd").main_source)
-    f.close()
+    with open("bcd.v", "w") as f:
+        f.write(verilog.convert(module, ios, name="bcd").main_source)

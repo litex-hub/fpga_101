@@ -7,27 +7,27 @@
                	Create a digital clock with FPGA
 
                   FPGA-101 / Lessons / Labs
-              Copyright 2018-2020 / EnjoyDigital
+              Copyright 2018-2026 / EnjoyDigital
 
 [> Presentation / Goals
 -----------------------
 During this lab, we will create a digital clock on the Nexys4DDR.
 A digital clock is a simple but interesting first project to do
-with an FPGA. If will allow us to create our own modules with
-Migen, connect then together, discover a bit more how FPGA are
-working and how to control simple peripherals.
+with an FPGA. It will allow us to create our own modules with
+Migen, connect them together, discover a bit more how FPGAs
+work and how to control simple peripherals.
 
 
 Only minimal notions of Migen are required for this lab.
 Migen manual can be found at: https://m-labs.hk/migen/manual/
 
 Solutions of lab001 or migen examples design can also be interesting
-ressources for this lab. Examples designs of lesson 002 can also be found
+resources for this lab. Example designs from lesson 002 can also be found
 in example.
 
 The pinout of the Nexys4DDR's basic IOs is shown below:
 
-![Nesys4DDR's basic IOs](doc/pinout.png)
+![Nexys4DDR's basic IOs](doc/pinout.png)
 
 
 Seven Segment schematic:
@@ -42,7 +42,10 @@ Seven Segment multiplexing:
 [> Architecture
 ---------------
 For more information about the digital clock architecture, please
-refers to lesson 002 slides: http://goo.gl/mZJvFQ
+refer to lesson 002 slides: http://goo.gl/mZJvFQ
+
+Migen generates a single Verilog file from the Python description. The generated
+Verilog is then processed by the FPGA vendor toolchain, Vivado for the Nexys4DDR.
 
 
 [> Instructions
@@ -57,7 +60,7 @@ refers to lesson 002 slides: http://goo.gl/mZJvFQ
  8) Execute/Simulate core.py and fill the missing parts of Core.
  9) Add Core module to the Clock module.
 10) Execute/Simulate bcd.py and fill the missing parts of BCD.
-11) Add BCD submodule to the Clock module (you need one BCD module for each digit). To add a verilog file to the design, use platform.add_source("my_verilog.v")
+11) Add BCD submodule to the Clock module (you need one BCD module for each digit). To add a Verilog file to the design, use platform.add_source("my_verilog.v")
 12) Connect the Core to the BCD modules and the BCD modules to the SevenSegmentDisplay and test on the board.
 13) Add a way to configure the clock (at least minutes and hours)
 
@@ -69,8 +72,8 @@ Optional
 [> Infos
 --------
 Some pitfalls:
-- The platform defines our IOs and a request on a it can only be done once.
-- A request create a Migen Signal() that can be used as others Signals.
+- The platform defines our IOs and a request on it can only be done once.
+- A request creates a Migen Signal() that can be used as other Signals.
 - Affectation is done with ".eq()" (equivalent to <= in VHDL).
 - Combinatorial logic must be added to self.comb: self.comb += [my_logic].
 - Synchronous logic must be added to self.sync: self.sync += [my_logic].

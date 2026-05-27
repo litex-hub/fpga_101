@@ -32,7 +32,7 @@ class Core(Module):
 
         # # #
 
-        # Synchronous assigment
+        # Synchronous assignment
         self.sync += [
             # Increment minutes
             If(self.inc_minutes,
