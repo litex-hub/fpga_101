@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -6,6 +7,7 @@
 #include <uart.h>
 #include <console.h>
 #include <generated/csr.h>
+#include <generated/soc.h>
 
 static char *readstr(void)
 {
@@ -73,6 +75,7 @@ static void help(void)
 	puts("reboot                          - reboot CPU");
 	puts("display                         - display test");
 	puts("led                             - led test");
+	puts("cycles                          - measure a loop with the LiteX timer");
 }
 
 static void reboot(void)
@@ -101,6 +104,37 @@ static void led_test(void)
 	}
 }
 
+static uint32_t timer0_read(void)
+{
+	timer0_update_value_write(1);
+	return timer0_value_read();
+}
+
+static void cycles_test(void)
+{
+	volatile uint32_t acc = 0;
+	uint32_t start;
+	uint32_t end;
+	uint32_t i;
+
+	timer0_en_write(0);
+	timer0_reload_write(0);
+	timer0_load_write(0xffffffff);
+	timer0_en_write(1);
+
+	start = timer0_read();
+	for(i=0; i<100000; i++)
+		acc += i;
+	end = timer0_read();
+
+	timer0_en_write(0);
+
+	printf("cycles_test: %u sys_clk cycles @ %uHz (acc=%u)\n",
+		(unsigned int)(start - end),
+		(unsigned int)CONFIG_CLOCK_FREQUENCY,
+		(unsigned int)acc);
+}
+
 static void console_service(void)
 {
 	char *str;
@@ -117,6 +151,8 @@ static void console_service(void)
 		display_test();
 	else if(strcmp(token, "led") == 0)
 		led_test();
+	else if(strcmp(token, "cycles") == 0)
+		cycles_test();
 	prompt();
 }
 

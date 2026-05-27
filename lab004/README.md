@@ -3,21 +3,21 @@
                  / /  / _ | / _ )____/ _ \/ _ \/ / /
                 / /__/ __ |/ _  /___/ // / // /_  _/
                /____/_/ |_/____/    \___/\___/ /_/
-                Use your first FPGA Soft Core CPU
+                Use your first FPGA soft-core CPU
 
                   FPGA-101 / Lessons / Labs
-              Copyright 2018-2020 / EnjoyDigital
+              Copyright 2018-2026 / EnjoyDigital
 
 [> Presentation / Goals
 -----------------------
 During this lab, we will create a System on Chip with Migen/LiteX that is
-controlled with a Soft Core CPU (VexRiscv).
+controlled with a soft-core CPU (VexRiscv).
 
-We will see how to control simple peripherals (Led, Buttons, Switches, PWM, SPI)
-from the Soft Core CPU.
+We will see how to control simple peripherals (LEDs, Buttons, Switches, PWM, SPI)
+from the soft-core CPU.
 
-For this tutorial, we will need Migen and LiteX. If not install on your computer,
-you can get them with the ./litex_setup.py init install --user.
+For this tutorial, we will need Migen and LiteX. If they are not installed on
+your computer, you can get them with ./litex_setup.py --init --install --user.
 
 
 [> Instructions
@@ -26,13 +26,13 @@ you can get them with the ./litex_setup.py init install --user.
 2) Compile the CPU firmware:
   - cd firmware && make all
 3) Start the LiteX Terminal:
-  - python3(.6) litex_term /dev/ttyUSBX --kernel firmware/firmware.bin
+  - litex_term /dev/ttyUSBX --kernel firmware/firmware.bin
 4) Verify that you are able to interact with the CPU (help for available commands)
-and test the display and led.
-5) Create a switches_test that recopie the values of the 16 switches to the 16
-leds of the board, add it the available commands and help. The list of registers
-and accesses functions can be found in build/software/include/generated/csr.h
-6) Create a knight rider "knight rider" animation on the 16 leds. (You can
+and test the display and LED.
+5) Create a switches_test that copies the values of the 16 switches to the 16
+LEDs of the board, add it to the available commands and help. The list of registers
+and access functions can be found in build/software/include/generated/csr.h
+6) Create a "knight rider" animation on the 16 LEDs. (You can
 find some inspiration here...: https://www.youtube.com/watch?v=oDhnfajh_w4)
 7) Adapt the ADXL362SPI class from test_adxl362.py from Lab003 to C:
   - create 2 separate functions:
@@ -51,9 +51,17 @@ led and see if it behaves as expected.
 --------
 To load the firmware to the board:
 litex_term /dev/ttyUSBX --kernel firmware/firmware.bin
-then enter "reboot" or press cpu_reset button.
+then enter "reboot" or press the cpu_reset_n button.
 
-While generating the desing, LiteX generate a csr.h that will be used to
+Lab004 reserves 64KiB of integrated main RAM by default. If your firmware grows
+beyond this, increase integrated_main_ram_size in base.py, use external memory,
+or reproduce the issue first in litex_sim with --integrated-main-ram-size.
+
+This minimal bare-metal firmware does not provide the POSIX times() syscall, so
+using libc clock() can fail at link time. Use the "cycles" command or timer0 CSR
+accesses when you need simple cycle measurements.
+
+While generating the design, LiteX generates a csr.h that will be used to
 know the available peripherals and their address. This file is located in
 build/software/include/generated/csr.h You can open to get the name of the
 registers you want to access.

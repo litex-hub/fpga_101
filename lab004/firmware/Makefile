@@ -1,9 +1,9 @@
-BUILD_DIR=../build/
+BUILD_DIR?=../build/
 
 include $(BUILD_DIR)/software/include/generated/variables.mak
 include $(SOC_DIRECTORY)/software/common.mak
 
-OBJECTS=isr.o main.o
+OBJECTS=crt0.o isr.o main.o
 
 all: firmware.bin
 
@@ -12,16 +12,22 @@ all: firmware.bin
 
 %.bin: %.elf
 	$(OBJCOPY) -O binary $< $@
+ifneq ($(OS),Windows_NT)
 	chmod -x $@
+endif
 
 firmware.elf: $(OBJECTS)
-	$(CC) $(LDFLAGS) \
-		-T linker.ld \
-		-N -o $@ \
+	$(CC) $(LDFLAGS) -T linker.ld -N -o $@ \
 		$(OBJECTS) \
 		$(PACKAGES:%=-L$(BUILD_DIR)/software/%) \
-		$(LIBS:lib%=-l%)
+		-Wl,--start-group \
+		$(LIBS:lib%=-l%) \
+		-Wl,--end-group \
+		-Wl,--gc-sections \
+		-Wl,-Map,$@.map
+ifneq ($(OS),Windows_NT)
 	chmod -x $@
+endif
 
 main.o: main.c
 	$(compile)
@@ -36,6 +42,6 @@ crt0.o: $(CPU_DIRECTORY)/crt0.S
 	$(assemble)
 
 clean:
-	$(RM) $(OBJECTS) $(OBJECTS:.o=.d) firmware.elf firmware.bin .*~ *~
+	$(RM) $(OBJECTS) $(OBJECTS:.o=.d) firmware.elf firmware.elf.map firmware.bin .*~ *~
 
 .PHONY: all main.o clean load
