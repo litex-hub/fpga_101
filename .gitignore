@@ -1,0 +1,12 @@
+**/__pycache__/
+*.py[cod]
+
+**/build/
+*.vcd
+
+lab002/**/bcd.v
+lab004/firmware/*.bin
+lab004/firmware/*.d
+lab004/firmware/*.elf
+lab004/firmware/*.elf.map
+lab004/firmware/*.o
