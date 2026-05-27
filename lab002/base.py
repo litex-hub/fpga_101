@@ -4,7 +4,7 @@ from migen import *
 from migen.genlib.cdc import MultiReg
 
 from litex.build.generic_platform import *
-from litex.build.xilinx import XilinxPlatform
+from litex.build.xilinx import Xilinx7SeriesPlatform
 
 from tick import *
 from display import *
@@ -23,7 +23,7 @@ _io = [
 
     ("clk100", 0, Pins("E3"), IOStandard("LVCMOS33")),
 
-    ("cpu_reset", 0, Pins("C12"), IOStandard("LVCMOS33")),
+    ("cpu_reset_n", 0, Pins("C12"), IOStandard("LVCMOS33")),
 
     ("display_cs_n",  0, Pins("J17"), IOStandard("LVCMOS33")),
     ("display_abcdefg",  0, Pins("T10 R10 K16 K13 P15 T11 L18 H15"), IOStandard("LVCMOS33")),
@@ -31,12 +31,12 @@ _io = [
 
 # Platform -----------------------------------------------------------------------------------------
 
-class Platform(XilinxPlatform):
+class Platform(Xilinx7SeriesPlatform):
     default_clk_name   = "clk100"
     default_clk_period = 1e9/100e6
 
     def __init__(self):
-        XilinxPlatform.__init__(self, "xc7a100t-csg324-1", _io, toolchain="vivado")
+        Xilinx7SeriesPlatform.__init__(self, "xc7a100t-csg324-1", _io, toolchain="vivado")
 
 # Design -------------------------------------------------------------------------------------------
 
@@ -76,9 +76,9 @@ class Clock(Module):
 
         # Binary Coded Decimal: convert ss/mm/hh to decimal values
 
-        # use the generated verilog file
+        # Use the generated Verilog file
 
-        # combinatorial assignement
+        # Combinatorial assignment
         self.comb += [
             # Connect tick to core (core timebase)
 

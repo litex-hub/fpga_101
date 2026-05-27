@@ -3,7 +3,7 @@
 from migen import *
 
 from litex.build.generic_platform import *
-from litex.build.xilinx import XilinxPlatform
+from litex.build.xilinx import Xilinx7SeriesPlatform
 
 # IOs ----------------------------------------------------------------------------------------------
 
@@ -33,8 +33,8 @@ _io = [
     ("user_sw",  5, Pins("T18"), IOStandard("LVCMOS33")),
     ("user_sw",  6, Pins("U18"), IOStandard("LVCMOS33")),
     ("user_sw",  7, Pins("R13"), IOStandard("LVCMOS33")),
-    ("user_sw",  8, Pins("T8"), IOStandard("LVCMOS33")),
-    ("user_sw",  9, Pins("U8"), IOStandard("LVCMOS33")),
+    ("user_sw",  8, Pins("T8"), IOStandard("LVCMOS18")),
+    ("user_sw",  9, Pins("U8"), IOStandard("LVCMOS18")),
     ("user_sw", 10, Pins("R16"), IOStandard("LVCMOS33")),
     ("user_sw", 11, Pins("T13"), IOStandard("LVCMOS33")),
     ("user_sw", 12, Pins("H6"), IOStandard("LVCMOS33")),
@@ -46,20 +46,21 @@ _io = [
 
     ("clk100", 0, Pins("E3"), IOStandard("LVCMOS33")),
 
-    ("cpu_reset", 0, Pins("C12"), IOStandard("LVCMOS33")),
+    ("cpu_reset_n", 0, Pins("C12"), IOStandard("LVCMOS33")),
 ]
 
 # Platform -----------------------------------------------------------------------------------------
 
-class Platform(XilinxPlatform):
+class Platform(Xilinx7SeriesPlatform):
     default_clk_name = "clk100"
     default_clk_period = 10.0
 
     def __init__(self):
-        XilinxPlatform.__init__(self, "xc7a100t-CSG324-1", _io, toolchain="vivado")
+        Xilinx7SeriesPlatform.__init__(self, "xc7a100t-csg324-1", _io, toolchain="vivado")
+        self.add_platform_command("set_property INTERNAL_VREF 0.900 [get_iobanks 34]")
 
     def do_finalize(self, fragment):
-        XilinxPlatform.do_finalize(self, fragment)
+        Xilinx7SeriesPlatform.do_finalize(self, fragment)
 
 # Design -------------------------------------------------------------------------------------------
 
@@ -71,7 +72,7 @@ class Switches(Module):
     def __init__(self, platform):     
         # synchronous assignments
         self.sync += []
-        # combinatorial assignements
+        # Combinatorial assignments
         for i in range(0, 8):
             led = platform.request("user_led", i)
             sw = platform.request("user_sw", i)
@@ -86,4 +87,3 @@ module = Switches(platform)
 # Build --------------------------------------------------------------------------------------------
 
 platform.build(module)
-

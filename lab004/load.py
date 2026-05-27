@@ -1,3 +1,8 @@
 #!/usr/bin/env python3
-import os
-os.system("djtgcfg prog -d Nexys4DDR -i 0 -f ./build/gateware/top.bit")
+
+from litex_boards.platforms import digilent_nexys4ddr
+
+
+platform = digilent_nexys4ddr.Platform()
+prog = platform.create_programmer()
+prog.load_bitstream("build/gateware/top.bit")

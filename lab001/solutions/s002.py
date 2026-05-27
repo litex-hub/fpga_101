@@ -3,7 +3,7 @@
 from migen import *
 
 from litex.build.generic_platform import *
-from litex.build.xilinx import XilinxPlatform
+from litex.build.xilinx import Xilinx7SeriesPlatform
 
 # IOs ----------------------------------------------------------------------------------------------
 
@@ -16,17 +16,17 @@ _io = [
 
     ("clk100", 0, Pins("E3"), IOStandard("LVCMOS33")),
 
-    ("cpu_reset", 0, Pins("C12"), IOStandard("LVCMOS33")),
+    ("cpu_reset_n", 0, Pins("C12"), IOStandard("LVCMOS33")),
 ]
 
 # Platform -----------------------------------------------------------------------------------------
 
-class Platform(XilinxPlatform):
+class Platform(Xilinx7SeriesPlatform):
     default_clk_name   = "clk100"
     default_clk_period = 1e9/100e6
 
     def __init__(self):
-        XilinxPlatform.__init__(self, "xc7a100t-csg324-1", _io, toolchain="vivado")
+        Xilinx7SeriesPlatform.__init__(self, "xc7a100t-csg324-1", _io, toolchain="vivado")
 
 # Design -------------------------------------------------------------------------------------------
 
@@ -45,7 +45,7 @@ class Blink(Module):
                 led.eq(~led)
             )
         ]
-        # combinatorial assignements
+        # Combinatorial assignments
         self.comb += []
 
 module = Blink(1, 100e6, platform.request("user_led"))
@@ -53,4 +53,3 @@ module = Blink(1, 100e6, platform.request("user_led"))
 # Build --------------------------------------------------------------------------------------------
 
 platform.build(module)
-

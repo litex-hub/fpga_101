@@ -5,7 +5,7 @@ import os
 from migen import *
 
 from litex.build.generic_platform import *
-from litex.build.xilinx import XilinxPlatform
+from litex.build.xilinx import Xilinx7SeriesPlatform
 
 # Info
 # #########################
@@ -74,12 +74,12 @@ _io = [
 ]
 
 
-class Platform(XilinxPlatform):
+class Platform(Xilinx7SeriesPlatform):
     default_clk_name = "clk100"
     default_clk_period = 10.0
 
     def __init__(self):
-        XilinxPlatform.__init__(self, "xc7a100t-csg324-1", _io, toolchain="vivado")
+        Xilinx7SeriesPlatform.__init__(self, "xc7a100t-csg324-1", _io, toolchain="vivado")
 
 
 class Tick(Module):
@@ -92,7 +92,7 @@ class Tick(Module):
         counter_preload = int(period*sys_clk_freq - 1)
         counter = Signal(max=int(period*sys_clk_freq - 1))
 
-        # Combinatorial assignements
+        # Combinatorial assignments
         self.comb += ce.eq(counter == 0)
 
         # Synchronous assignments
@@ -297,7 +297,7 @@ class Transmitter(Module):
 # Pour visualiser ce que transmet le FPGA, lancer le script:
 # litex_term /dev/ttyUSBX
 #
-# Pour reseter le FPGA, appuyer sur le bouton cpu_reset
+# Pour reseter le FPGA, appuyer sur le bouton cpu_reset_n
 
 # 7) Renseigner ci-dessous le message transmis par la carte et envoyer par mail
 # ce fichier complété pour terminer l'évaluation.

@@ -3,7 +3,8 @@
 from migen import *
 
 from litex.build.generic_platform import *
-from litex.build.xilinx import XilinxPlatform
+from litex.build.io import CRG
+from litex.build.xilinx import Xilinx7SeriesPlatform
 
 from litex.soc.integration.soc_core import *
 from litex.soc.integration.builder import *
@@ -42,8 +43,8 @@ _io = [
     ("user_sw",  5, Pins("T18"), IOStandard("LVCMOS33")),
     ("user_sw",  6, Pins("U18"), IOStandard("LVCMOS33")),
     ("user_sw",  7, Pins("R13"), IOStandard("LVCMOS33")),
-    ("user_sw",  8, Pins("T8"), IOStandard("LVCMOS33")),
-    ("user_sw",  9, Pins("U8"), IOStandard("LVCMOS33")),
+    ("user_sw",  8, Pins("T8"), IOStandard("LVCMOS18")),
+    ("user_sw",  9, Pins("U8"), IOStandard("LVCMOS18")),
     ("user_sw", 10, Pins("R16"), IOStandard("LVCMOS33")),
     ("user_sw", 11, Pins("T13"), IOStandard("LVCMOS33")),
     ("user_sw", 12, Pins("H6"), IOStandard("LVCMOS33")),
@@ -64,12 +65,12 @@ _io = [
         IOStandard("LVCMOS33"),
     ),
 
-    ("display_cs_n",  0, Pins("J17 J18 J14 P14 K2 U13 T9 T14"), IOStandard("LVCMOS33")),
+    ("display_cs_n",  0, Pins("J17 J18 T9 J14 P14 T14 K2 U13"), IOStandard("LVCMOS33")),
     ("display_abcdefg",  0, Pins("T10 R10 K16 K13 P15 T11 L18 H15"), IOStandard("LVCMOS33")),
 
     ("clk100", 0, Pins("E3"), IOStandard("LVCMOS33")),
 
-    ("cpu_reset", 0, Pins("C12"), IOStandard("LVCMOS33")),
+    ("cpu_reset_n", 0, Pins("C12"), IOStandard("LVCMOS33")),
 
     ("serial", 0,
         Subsignal("tx", Pins("D4")),
@@ -89,12 +90,13 @@ _io = [
 
 # Platform -----------------------------------------------------------------------------------------
 
-class Platform(XilinxPlatform):
+class Platform(Xilinx7SeriesPlatform):
     default_clk_name   = "clk100"
     default_clk_period = 1e9/100e6
 
     def __init__(self):
-        XilinxPlatform.__init__(self, "xc7a100t-csg324-1", _io, toolchain="vivado")
+        Xilinx7SeriesPlatform.__init__(self, "xc7a100t-csg324-1", _io, toolchain="vivado")
+        self.add_platform_command("set_property INTERNAL_VREF 0.900 [get_iobanks 34]")
 
 # Design -------------------------------------------------------------------------------------------
 
@@ -111,11 +113,11 @@ class BaseSoC(SoCMini):
             ident="My first LiteX System On Chip", ident_version=True)
 
         # Clock Reset Generation
-        self.submodules.crg = CRG(platform.request("clk100"), ~platform.request("cpu_reset"))
+        self.submodules.crg = CRG(platform.request("clk100"), ~platform.request("cpu_reset_n"))
 
         # No CPU, use Serial to control Wishbone bus
         self.submodules.serial_bridge = UARTWishboneBridge(platform.request("serial"), sys_clk_freq)
-        self.add_wb_master(self.serial_bridge.wishbone)
+        self.bus.add_master("serial_bridge", self.serial_bridge.wishbone)
 
         # FPGA identification
         self.submodules.dna = dna.DNA()
