@@ -3,11 +3,18 @@
                 / _// ___/ (_ / __ /___/ / // / /
                /_/ /_/   \___/_/ |_|  /_/\___/_/
                      FPGA-101 / Lessons / Labs
-               Copyright 2018-2020 / EnjoyDigital
+               Copyright 2018-2026 / EnjoyDigital
 
 [> Install LiteX
 ----------------
 Follow: https://github.com/enjoy-digital/litex/wiki/Installation
+
+Quick install/update commands:
+  wget https://raw.githubusercontent.com/enjoy-digital/litex/master/litex_setup.py
+  chmod +x litex_setup.py
+  ./litex_setup.py --init --install --user --config=standard
+  ./litex_setup.py --gcc=riscv
+  ./litex_setup.py --update
 
 [> Lessons
 ----------
@@ -27,9 +34,17 @@ Follow: https://github.com/enjoy-digital/litex/wiki/Installation
      http://goo.gl/UaygL4
  - Lab-003: Create your first System on Chip
      http://goo.gl/veNGDD
- - Lab-004: Use your first Soft Core CPU
+ - Lab-004: Use your first soft-core CPU
      http://goo.gl/Q5dtyV
 
+[> Board / Simulation Notes
+---------------------------
+The labs target the Digilent Nexys4DDR / Nexys A7-100T board. For another
+board, keep the lab logic and replace the Platform / IO resources with the
+matching resources from litex-boards.
+
+Lab004 firmware can also be exercised without a board with LiteX simulation:
+  litex_sim --cpu-type=vexriscv --integrated-main-ram-size=0x10000 --ram-init=lab004/firmware/firmware.bin
 
 [> Contact
 ----------

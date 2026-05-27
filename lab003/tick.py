@@ -18,7 +18,7 @@ class Tick(Module):
         counter_preload = int(period*sys_clk_freq - 1)
         counter = Signal(max=int(period*sys_clk_freq - 1))
 
-        # Combinatorial assignements
+        # Combinatorial assignments
         self.comb += self.ce.eq(counter == 0)
 
         # Synchronous assignments

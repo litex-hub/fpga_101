@@ -6,7 +6,7 @@
                	        Discover FPGAs
 
                   FPGA-101 / Lessons / Labs
-               Copyright 2018-2020 / EnjoyDigital
+               Copyright 2018-2026 / EnjoyDigital
 
 [> Presentation / Goals
 -----------------------
@@ -19,7 +19,7 @@ Migen manual can be found at: https://m-labs.hk/migen/manual/
 
 The pinout of the Nexys4DDR's basic IOs is shown below:
 
-![Nesys4DDR's basic IOs](pinout.png)
+![Nexys4DDR's basic IOs](pinout.png)
 
 The provided base.py example is explained below:
 
@@ -28,11 +28,11 @@ Migen's imports
 from migen import *
 
 from litex.build.generic_platform import *
-from litex.build.xilinx import XilinxPlatform
+from litex.build.xilinx import Xilinx7SeriesPlatform
 ```
 
 IOs definition. During this lab we will add some IOs
-according to the Nesys4DDR's pinout.
+according to the Nexys4DDR's pinout.
 ```python
 _io = [
     ("user_led",  0, Pins("H17"), IOStandard("LVCMOS33")),
@@ -43,7 +43,7 @@ _io = [
 
     ("clk100", 0, Pins("E3"), IOStandard("LVCMOS33")),
 
-    ("cpu_reset", 0, Pins("C12"), IOStandard("LVCMOS33")),
+    ("cpu_reset_n", 0, Pins("C12"), IOStandard("LVCMOS33")),
 ]
 ```
 
@@ -55,15 +55,12 @@ defines:
 We are not going to change things here during this lab.
 
 ```python
-class Platform(XilinxPlatform):
+class Platform(Xilinx7SeriesPlatform):
     default_clk_name = "clk100"
     default_clk_period = 1e9/100e6
 
     def __init__(self):
-        XilinxPlatform.__init__(self, "xc7a100t-CSG324-1", _io, toolchain="vivado")
-
-    def do_finalize(self, fragment):
-        XilinxPlatform.do_finalize(self, fragment)
+        Xilinx7SeriesPlatform.__init__(self, "xc7a100t-csg324-1", _io, toolchain="vivado")
 ```
 
 We then declare our platform and request the led pin.
@@ -92,8 +89,8 @@ Once design is done, we can build our module and generate the FPGA bitstream.
 platform.build(module)
 
 ```
-Migen will then generates the verilog file (you can find it in ./build/top.v) and
-will use Vivado to build the design. The bitstream should be generated in a couple
+Migen then generates the Verilog file (you can find it in ./build/top.v) and
+uses Vivado to build the design. The bitstream should be generated in a couple
 of minutes and is the ./build/top.bit file.
 
 Provided load.py script will allow you to load it to the Nexys4DDR.
@@ -101,7 +98,7 @@ Provided load.py script will allow you to load it to the Nexys4DDR.
 [> Instructions
 ---------------
 1) Build the design (base.py) and load it (load.py)
-2) System clock is 100Mhz, make the led blink at 1Hz
+2) System clock is 100MHz, make the led blink at 1Hz
 3) Connect the 16 switches to the 16 leds.
 4) Same as 3), but invert the polarity on the 8 first leds.
 5) Make one of the rgb led blink at: 1Hz for the red, 2Hz for the green,
@@ -110,8 +107,8 @@ Provided load.py script will allow you to load it to the Nexys4DDR.
 [> Infos
 --------
 Some pitfalls:
-- The platform defines our IOs and a request on a it can only be done once.
-- A request create a Migen Signal() that can be used as others Signals.
+- The platform defines our IOs and a request on it can only be done once.
+- A request creates a Migen Signal() that can be used as other Signals.
 - Affectation is done with ".eq()" (equivalent to <= in VHDL).
 - Combinatorial logic must be added to self.comb: self.comb += [my_logic].
 - Synchronous logic must be added to self.sync: self.sync += [my_logic].

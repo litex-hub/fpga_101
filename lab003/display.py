@@ -36,7 +36,7 @@ class _SevenSegment(Module):
           0xf: abcdefg.eq(0b1110001),
         }
 
-        # Combinatorial assignement
+        # Combinatorial assignment
         self.comb += Case(value, cases)
 
 # _SevenSegmentDisplay -----------------------------------------------------------------------------
@@ -65,10 +65,10 @@ class _SevenSegmentDisplay(Module):
         # cycle 2 : 0b000100
         # cycle 3 : 0b001000
         # cycle 4 : 0b010000
-        # cycle 5 : 0b100000s
+        # cycle 5 : 0b100000
         # cycle 6 : 0b000001
         cs = Signal(6, reset=0b000001)
-        # synchronous assigment
+        # Synchronous assignment
         self.sync += [
             If(self.tick.ce,     # At the next tick:
                 cs[1].eq(cs[0]), # bit1 takes bit0 value
@@ -79,7 +79,7 @@ class _SevenSegmentDisplay(Module):
                 cs[0].eq(cs[5])  # bit0 takes bit5 value
             )
         ]
-        # Combinatorial assigment
+        # Combinatorial assignment
         self.comb += self.cs.eq(cs)
 
         # cs to value selection.
@@ -93,7 +93,7 @@ class _SevenSegmentDisplay(Module):
             0b010000 : seven_segment.value.eq(self.values[4]),
             0b100000 : seven_segment.value.eq(self.values[5])
         }
-        # Combinatorial assigment
+        # Combinatorial assignment
         self.comb += Case(self.cs, cases)
 
 # SevenSegmentDisplay ------------------------------------------------------------------------------
@@ -121,7 +121,7 @@ class SevenSegmentDisplay(Module, AutoCSR):
         self.sync += [
             # When CPU access write CSR
             If(self.write.re,
-                # Select witch value to update based on sel register
+                # Select which value to update based on sel register
                 Case(self.sel.storage, {
                     0 : display.values[0].eq(self.value.storage),
                     1 : display.values[1].eq(self.value.storage),
