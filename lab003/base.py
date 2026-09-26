@@ -14,6 +14,7 @@ from litex.soc.cores.spi import SPIMaster
 
 from ios import Led, RGBLed, Button, Switch
 from display import SevenSegmentDisplay
+from litex.soc.cores.xadc import XilinxSystemMonitor
 
 # IOs ----------------------------------------------------------------------------------------------
 
@@ -120,42 +121,42 @@ class BaseSoC(SoCMini):
         self.bus.add_master("serial_bridge", self.serial_bridge.wishbone)
 
         # FPGA identification
-        self.submodules.dna = dna.DNA()
-        self.add_csr("dna")
+        self.submodules.dna = dna.S7DNA()
+        self.csr.add("dna")
 
         # FPGA Temperature/Voltage
-        self.submodules.xadc = xadc.XADC()
-        self.add_csr("xadc")
+        self.submodules.xadc = XilinxSystemMonitor()
+        self.csr.add("xadc")
 
         # Led
         user_leds = Cat(*[platform.request("user_led", i) for i in range(16)])
         self.submodules.leds = Led(user_leds)
-        self.add_csr("leds")
+        self.csr.add("leds")
 
         # Switches
         user_switches = Cat(*[platform.request("user_sw", i) for i in range(16)])
         self.submodules.switches = Switch(user_switches)
-        self.add_csr("switches")
+        self.csr.add("switches")
 
         # Buttons
         user_buttons = Cat(*[platform.request("user_btn", i) for i in range(5)])
         self.submodules.buttons = Button(user_buttons)
-        self.add_csr("buttons")
+        self.csr.add("buttons")
 
         # RGB Led
         self.submodules.rgbled  = RGBLed(platform.request("user_rgb_led",  0))
-        self.add_csr("rgbled")
+        self.csr.add("rgbled")
 
         # Accelerometer
         self.submodules.adxl362 = SPIMaster(platform.request("adxl362_spi"),
             data_width   = 32,
             sys_clk_freq = sys_clk_freq,
             spi_clk_freq = 1e6)
-        self.add_csr("adxl362")
+        self.csr.add("adxl362")
 
         # SevenSegmentDisplay
         self.submodules.display = SevenSegmentDisplay(sys_clk_freq)
-        self.add_csr("display")
+        self.csr.add("display")
         self.comb += [
             platform.request("display_cs_n").eq(~self.display.cs),
             platform.request("display_abcdefg").eq(~self.display.abcdefg)
